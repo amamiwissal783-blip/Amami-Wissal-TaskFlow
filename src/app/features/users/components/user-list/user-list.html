@@ -1,0 +1,24 @@
+<div class="p-6">
+
+  <input
+    type="text"
+    [ngModel]="searchTerm()"
+    (ngModelChange)="searchTerm.set($event)"
+    placeholder="Rechercher un utilisateur..."
+    class="border rounded-lg px-4 py-2 w-full mb-6"
+  />
+
+  @for (user of filteredUsers(); track user.id) {
+
+    <app-user-card
+      [user]="user"
+      [projects]="projects()"
+    />
+
+  } @empty {
+
+    <app-empty-state />
+
+  }
+
+</div>

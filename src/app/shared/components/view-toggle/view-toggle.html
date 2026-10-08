@@ -1,0 +1,23 @@
+<div class="flex gap-2 mb-6">
+
+  <button
+    type="button"
+    (click)="setView('tasks')"
+    [class.bg-blue-600]="activeView() === 'tasks'"
+    [class.text-white]="activeView() === 'tasks'"
+    class="px-4 py-2 rounded-lg border"
+  >
+    Par tâche
+  </button>
+
+  <button
+    type="button"
+    (click)="setView('users')"
+    [class.bg-blue-600]="activeView() === 'users'"
+    [class.text-white]="activeView() === 'users'"
+    class="px-4 py-2 rounded-lg border"
+  >
+    Par user
+  </button>
+
+</div>
