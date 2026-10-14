@@ -5,5 +5,9 @@ export interface Project {
   name: string;
   description: string;
   status: TaskStatus;
+
+  startDate: string;
+  budget: number;
+
   tasks: Task[];
 }

@@ -3,6 +3,10 @@ import { Component, computed, input } from '@angular/core';
 import { User } from '../../models/user.model';
 import { Project } from '../../../projects/models/project.model';
 
+import { LowerCasePipe, TitleCasePipe, NgClass, NgStyle } from '@angular/common';
+
+import { InitialsPipe } from '../../../../shared/pipes/initials.pipe';
+
 import { UserProjectGroup } from '../user-project-group/user-project-group';
 import { EmptyState } from '../../../../shared/components/empty-state/empty-state';
 
@@ -11,7 +15,12 @@ import { EmptyState } from '../../../../shared/components/empty-state/empty-stat
 
   imports: [
     UserProjectGroup,
-    EmptyState
+    EmptyState,
+    TitleCasePipe,
+    LowerCasePipe,
+    InitialsPipe,
+    NgClass,
+    NgStyle
   ],
 
   templateUrl: './user-card.html',
@@ -22,6 +31,16 @@ export class UserCard {
   user = input.required<User>();
   projects = input.required<Project[]>();
 
+  roleColors: Record<string, string> = {
+    'Développeur': '#3b82f6',
+    'Designer': '#a855f7',
+    'Chef de projet': '#f59e0b',
+    'Testeur': '#22c55e'
+  };
+
+  get avatarColor(): string {
+    return this.roleColors[this.user().role] ?? '#6b7280';
+  }
 
   assignedTasks = computed(() => {
 

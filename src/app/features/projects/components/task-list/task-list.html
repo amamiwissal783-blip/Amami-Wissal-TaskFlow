@@ -1,63 +1,114 @@
-<div class="mt-4">
+@for (task of tasks(); track task.id) {
 
-  <h3 class="font-semibold mb-3">
-    Tâches
-  </h3>
+  <div
+    appHighlight="#e0f2fe"
+    appOverdue
+    [dueDate]="task.dueDate"
+    [done]="task.status === 'Terminé'"
 
-  @if (tasks().length === 0) {
+    class="border-l-4 p-4 mb-3 rounded"
 
-    <p class="text-gray-500 italic">
-      Aucune tâche.
+    [ngClass]="{
+      'border-green-500': task.status === 'Terminé',
+      'border-blue-500': task.status === 'En cours',
+      'border-gray-400': task.status === 'En attente'
+    }"
+  >
+
+    <!-- Titre -->
+    <h4 class="font-semibold text-lg">
+      {{ task.title }}
+    </h4>
+
+
+    <!-- Priorité avec @switch -->
+    <p>
+      Priorité :
+
+      @switch (task.priority) {
+
+        @case ('Haute') {
+          <span>▲ Haute</span>
+        }
+
+        @case ('Moyenne') {
+          <span>● Moyenne</span>
+        }
+
+        @default {
+          <span>▼ Basse</span>
+        }
+
+      }
     </p>
 
-  } @else {
 
-    <div class="space-y-3">
+    <!-- Statut -->
+    <p>
+      Statut : {{ task.status }}
+    </p>
 
-      @for (task of tasks(); track task.id) {
 
-        <div class="border-l-4 border-gray-400 pl-4 py-2 bg-gray-50 rounded">
+    <!-- Échéance avec alias "as" -->
+    @if (task.dueDate; as dueDate) {
 
-          <p class="font-medium">
-            {{ task.title }}
-          </p>
+      <p>
+        Échéance :
 
-          <p class="text-sm text-gray-600">
-            Priorité : {{ task.priority }}
-          </p>
+        {{ dueDate | date:'dd/MM/yyyy' }}
 
-          @if (showAssignee()) {
-          }
+        ·
 
-          <p class="text-sm">
-            Statut :
+        {{ dueDate | deadline }}
+      </p>
 
-            @if (task.status === 'En cours') {
-              <span class="text-blue-600 font-medium">
-                {{ task.status }}
-              </span>
-            }
+    } @else {
 
-            @if (task.status === 'En attente') {
-              <span class="text-yellow-600 font-medium">
-                {{ task.status }}
-              </span>
-            }
+      <p>
+        Aucune échéance
+      </p>
 
-            @if (task.status === 'Terminé') {
-              <span class="text-green-600 font-medium">
-                {{ task.status }}
-              </span>
-            }
+    }
 
-          </p>
 
-        </div>
+    <!-- Description -->
+    @if (task.description) {
+
+      <p
+        class="text-gray-600 mt-2"
+        [appTooltip]="task.description"
+      >
+        {{ task.description | truncate:40 }}
+      </p>
+
+    }
+
+
+    <!-- Assigné -->
+    @if (showAssignee()) {
+
+      @if (task.assigneeId) {
+
+        <p class="text-sm text-gray-500 mt-2">
+          Assigné à l'utilisateur #{{ task.assigneeId }}
+        </p>
+
+      } @else {
+
+        <p class="text-sm text-gray-500 mt-2">
+          Non assignée
+        </p>
 
       }
 
-    </div>
+    }
 
-  }
+  </div>
 
-</div>
+} @empty {
+
+  <p class="text-gray-500">
+    Aucune tâche
+  </p>
+
+}
