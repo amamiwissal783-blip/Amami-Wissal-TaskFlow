@@ -10,11 +10,13 @@ import { InitialsPipe } from '../../../../shared/pipes/initials.pipe';
 import { UserProjectGroup } from '../user-project-group/user-project-group';
 import { EmptyState } from '../../../../shared/components/empty-state/empty-state';
 
+import { HoverScaleDirective } from '../../../../shared/directives/hover-scale.directive';
 @Component({
   selector: 'app-user-card',
 
   imports: [
     UserProjectGroup,
+    HoverScaleDirective,
     EmptyState,
     TitleCasePipe,
     LowerCasePipe,

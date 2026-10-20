@@ -2,6 +2,7 @@ import { Component, input } from '@angular/core';
 import { DatePipe, NgClass } from '@angular/common';
 
 import { Task } from '../../models/task.model';
+import { TaskItem } from '../task-item/task-item';
 
 import { TruncatePipe } from '../../../../shared/pipes/truncate.pipe';
 import { DeadlinePipe } from '../../../../shared/pipes/deadline.pipe';
@@ -20,7 +21,8 @@ import { TooltipDirective } from '../../../../shared/directives/tooltip.directiv
     DeadlinePipe,
     HighlightDirective,
     OverdueDirective,
-    TooltipDirective
+    TooltipDirective,
+    TaskItem
   ],
 
   templateUrl: './task-list.html',

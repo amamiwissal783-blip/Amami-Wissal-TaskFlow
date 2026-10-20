@@ -12,12 +12,15 @@ import {
 
 import { Project } from '../../models/project.model';
 import { TaskList } from '../task-list/task-list';
-
+import { TaskCountPipe } from '../../../../shared/pipes/task-count.pipe';
+import { HoverScaleDirective } from '../../../../shared/directives/hover-scale.directive';
 @Component({
   selector: 'app-project-card',
 
   imports: [
     TaskList,
+    HoverScaleDirective,
+    TaskCountPipe,
     UpperCasePipe,
     DatePipe,
     CurrencyPipe,

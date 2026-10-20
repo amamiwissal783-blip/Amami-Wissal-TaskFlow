@@ -1,4 +1,6 @@
-<div class="bg-white rounded-xl shadow-md p-6">
+<div
+  appHoverScale
+  class="bg-white rounded-xl shadow-md p-6">
 
   <h2 class="text-2xl font-bold mb-2">
     {{ project().name | uppercase }}
@@ -28,6 +30,10 @@
     {{ project().status }}
   </p>
 
+  <p class="mt-2">
+    <strong>Nombre de tâches :</strong>
+    {{ project().tasks.length | taskCount }}
+  </p>
 
 
   @if (project().tasks.length > 0) {
