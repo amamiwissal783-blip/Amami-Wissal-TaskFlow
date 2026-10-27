@@ -1,20 +1,38 @@
 <div class="border rounded-lg p-4 mb-4">
 
-  <div class="flex justify-between items-center mb-3">
+  <div
+    class="
+      flex
+      justify-between
+      items-center
+      mb-3
+    "
+  >
 
     <h3 class="font-semibold">
       {{ project().name }}
     </h3>
 
+
     <span class="text-sm text-gray-500">
-      {{ tasks().length }} tâche(s)
+
+      {{ tasks().length }}
+
+      tâche(s)
+
     </span>
 
   </div>
 
+
   <app-task-list
+
     [tasks]="tasks()"
+
     [showAssignee]="false"
+
+    [showActions]="false"
+
   />
 
 </div>

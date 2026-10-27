@@ -1,103 +1,260 @@
 <div
   appHoverScale
-  class="bg-white rounded-xl shadow-md p-6">
+  class="
+    bg-white
+    rounded-xl
+    shadow-md
+    p-6
+  "
+>
+
+
+  <!-- Nom -->
 
   <h2 class="text-2xl font-bold mb-2">
+
     {{ project().name | uppercase }}
+
   </h2>
 
 
+  <!-- Description -->
+
   <p class="text-gray-600 mb-4">
+
     {{ project().description }}
+
   </p>
 
+
+  <!-- Date -->
 
   <p>
-    <strong>Date de début :</strong>
 
-    {{ project().startDate | date:'dd MMMM yyyy' }}
+    <strong>
+      Date de début :
+    </strong>
+
+    {{
+      project().startDate
+      | date:'dd MMMM yyyy'
+    }}
+
   </p>
 
 
-<p>
-  <strong>Budget :</strong>
-  {{ project().budget | currency:'TND':'code':'1.2-2' }}
-</p>
+  <!-- Budget -->
+
+  <p>
+
+    <strong>
+      Budget :
+    </strong>
+
+    {{
+      project().budget
+      | currency:
+        'TND':
+        'code':
+        '1.2-2'
+    }}
+
+  </p>
+
+
+  <!-- Statut projet -->
 
   <p class="mt-2">
-    <strong>Statut :</strong>
+
+    <strong>
+      Statut :
+    </strong>
 
     {{ project().status }}
+
   </p>
+
+
+  <!-- Nombre de tâches -->
 
   <p class="mt-2">
-    <strong>Nombre de tâches :</strong>
-    {{ project().tasks.length | taskCount }}
+
+    <strong>
+      Nombre de tâches :
+    </strong>
+
+    {{
+      project().tasks.length
+      | taskCount
+    }}
+
   </p>
 
 
-  @if (project().tasks.length > 0) {
+  <!-- Nombre terminées -->
+
+  <p class="mt-2">
+
+    <strong>
+      Tâches terminées :
+    </strong>
+
+    {{ completedTasks() }}
+
+    /
+
+    {{ project().tasks.length }}
+
+  </p>
+
+
+  <!-- Progression -->
+
+  @if (
+    project().tasks.length > 0
+  ) {
 
     <div class="mt-4">
 
       <p>
+
         Taux de réalisation :
-        {{ completionRate() | percent:'1.0-0' }}
+
+        {{
+          completionRate()
+          | percent:'1.0-0'
+        }}
+
       </p>
 
-      <div class="w-full bg-gray-200 rounded-full h-2 mt-2">
+
+      <!-- Barre -->
+
+      <div
+        class="
+          w-full
+          bg-gray-200
+          rounded-full
+          h-2
+          mt-2
+        "
+      >
 
         <div
-          class="h-2 rounded-full"
-          [style.width.%]="completionRate() * 100"
-          [style.background-color]="barColor"
+          class="
+            h-2
+            rounded-full
+          "
+
+          [style.width.%]="
+            completionRate()
+            * 100
+          "
+
+          [style.background-color]="
+            barColor
+          "
         >
         </div>
 
       </div>
 
+
+      <!-- Coût moyen -->
+
+      <p class="mt-2">
+
+        Coût moyen par tâche :
+
+        {{
+          averageCost()
+          | number:'1.0-0'
+        }}
+
+        TND
+
+      </p>
+
+
     </div>
 
   }
 
-  @if (project().tasks.length === 0) {
 
-    <p class="font-semibold">
+  <!-- Message avancement -->
+
+  @if (
+    project().tasks.length === 0
+  ) {
+
+    <p class="font-semibold mt-3">
+
       Aucune tâche pour le moment
+
     </p>
 
-  } @else if (completionRate() === 1) {
+  }
 
-    <p class="font-semibold">
+  @else if (
+    completionRate() === 1
+  ) {
+
+    <p class="font-semibold mt-3">
+
       Projet terminé
+
     </p>
 
-  } @else if (completionRate() > 0) {
+  }
 
-    <p class="font-semibold">
+  @else if (
+    completionRate() > 0
+  ) {
+
+    <p class="font-semibold mt-3">
+
       En progression
+
     </p>
 
-  } @else {
+  }
 
-    <p class="font-semibold">
+  @else {
+
+    <p class="font-semibold mt-3">
+
       Pas encore démarré
+
     </p>
 
   }
 
 
+  <!-- Priorités -->
 
   <div class="mt-4">
 
     <h3 class="font-semibold">
+
       Tâches par priorité
+
     </h3>
 
-    @for (item of tasksByPriority() | keyvalue; track item.key) {
+
+    @for (
+      item of
+      tasksByPriority()
+      | keyvalue;
+
+      track item.key
+    ) {
 
       <p>
-        {{ item.key }} : {{ item.value }}
+
+        {{ item.key }}
+        :
+        {{ item.value }}
+
       </p>
 
     }
@@ -105,26 +262,69 @@
   </div>
 
 
+  <!-- TaskList -->
 
   <div class="mt-5">
 
     <h3 class="font-semibold mb-3">
+
       Tâches
+
     </h3>
 
+
     <app-task-list
-      [tasks]="project().tasks | slice:0:3"
+
+      [tasks]="
+        project().tasks
+      "
+
+      [users]="
+        users()
+      "
+
+      [showAssignee]="true"
+
+      [showActions]="true"
+
+
+      (taskStatusChange)="
+        onTaskStatusChange(
+          $event
+        )
+      "
+
+
+      (taskDelete)="
+        onTaskDelete(
+          $event
+        )
+      "
+
     />
 
   </div>
 
 
+  <!-- Bouton sélection -->
+
   <button
     type="button"
-    class="mt-4 bg-slate-900 text-white px-4 py-2 rounded-lg"
+
+    class="
+      mt-4
+      bg-slate-900
+      text-white
+      px-4 py-2
+      rounded-lg
+    "
+
     (click)="selectProject()"
   >
+
     Sélectionner
+
   </button>
+
 
 </div>

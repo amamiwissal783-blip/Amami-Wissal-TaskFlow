@@ -1,14 +1,140 @@
-@for (task of tasks(); track task.id) {
+<!-- Filtres -->
+
+<div class="mb-4 flex flex-wrap gap-2">
+
+
+  <!-- Toutes -->
+
+  <button
+    type="button"
+
+    class="
+      rounded-lg
+      border
+      px-3 py-2
+    "
+
+    [class.bg-slate-900]="
+      filter() === 'all'
+    "
+
+    [class.text-white]="
+      filter() === 'all'
+    "
+
+    (click)="setFilter('all')"
+  >
+
+    Toutes
+
+  </button>
+
+
+  <!-- En cours -->
+
+  <button
+    type="button"
+
+    class="
+      rounded-lg
+      border
+      px-3 py-2
+    "
+
+    [class.bg-blue-600]="
+      filter() === 'in-progress'
+    "
+
+    [class.text-white]="
+      filter() === 'in-progress'
+    "
+
+    (click)="
+      setFilter('in-progress')
+    "
+  >
+
+    En cours
+
+  </button>
+
+
+  <!-- Terminées -->
+
+  <button
+    type="button"
+
+    class="
+      rounded-lg
+      border
+      px-3 py-2
+    "
+
+    [class.bg-green-600]="
+      filter() === 'completed'
+    "
+
+    [class.text-white]="
+      filter() === 'completed'
+    "
+
+    (click)="
+      setFilter('completed')
+    "
+  >
+
+    Terminées
+
+  </button>
+
+
+</div>
+
+
+<!-- Tâches -->
+
+@for (
+  task of filteredTasks();
+  track task.id
+) {
 
   <app-task-item
+
     [task]="task"
-    [showAssignee]="showAssignee()"
+
+    [showAssignee]="
+      showAssignee()
+    "
+
+    [showActions]="
+      showActions()
+    "
+
+    [assigneeName]="
+      getAssigneeName(
+        task.assigneeId
+      )
+    "
+
+
+    (taskStatusChange)="
+      onTaskStatusChange(
+        task.id,
+        $event
+      )
+    "
+
+
+    (taskDelete)="
+      onTaskDelete($event)
+    "
+
   />
 
 } @empty {
 
   <p class="text-gray-500">
-    Aucune tâche
+    Aucune tâche pour ce filtre
   </p>
 
 }
