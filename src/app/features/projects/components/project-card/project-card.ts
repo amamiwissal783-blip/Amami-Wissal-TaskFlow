@@ -73,8 +73,6 @@ export class ProjectCard {
     input<number>(0);
 
 
-  // Events
-
   projectSelected =
     output<Project>();
 
@@ -86,8 +84,7 @@ export class ProjectCard {
   taskDelete =
     output<TaskDelete>();
 
-
-  // Pourcentage
+  projectDelete = output<number>();
 
   completionRate =
     computed(() => {
@@ -112,7 +109,6 @@ export class ProjectCard {
     });
 
 
-  // Coût moyen
 
   averageCost =
     computed(() => {
@@ -196,8 +192,6 @@ export class ProjectCard {
   }
 
 
-  // Sélection
-
   selectProject(): void {
 
     this.projectSelected.emit(
@@ -206,8 +200,6 @@ export class ProjectCard {
 
   }
 
-
-  // Remontée statut
 
   onTaskStatusChange(
     event: TaskStatusChange
@@ -228,9 +220,6 @@ export class ProjectCard {
 
   }
 
-
-  // Remontée suppression
-
   onTaskDelete(
     event: TaskDelete
   ): void {
@@ -246,5 +235,12 @@ export class ProjectCard {
     });
 
   }
+
+  deleteProject(): void {
+
+  this.projectDelete.emit(
+    this.project().id
+  );
+}
 
 }

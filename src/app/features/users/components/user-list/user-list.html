@@ -1,24 +1,65 @@
-<div class="p-6">
+@if (loading()) {
 
-  <input
-    type="text"
-    [ngModel]="searchTerm()"
-    (ngModelChange)="searchTerm.set($event)"
-    placeholder="Rechercher un utilisateur..."
-    class="border rounded-lg px-4 py-2 w-full mb-6"
-  />
+  <div
+    class="p-4 text-center text-blue-600"
+  >
+    Chargement des utilisateurs...
+  </div>
 
-  @for (user of filteredUsers(); track user.id) {
+}
 
-    <app-user-card
-      [user]="user"
-      [projects]="projects()"
+
+@if (error(); as errorMessage) {
+
+  <div
+    class="p-4 mb-4 rounded-lg bg-red-100 text-red-700"
+  >
+    {{ errorMessage }}
+  </div>
+
+}
+
+
+@if (!loading() && !error()) {
+
+  <div class="p-6">
+
+    <input
+      type="text"
+
+      [ngModel]="searchTerm()"
+
+      (ngModelChange)="
+        searchTerm.set($event)
+      "
+
+      placeholder="Rechercher un utilisateur..."
+
+      class="border rounded-lg px-4 py-2 w-full mb-6"
     />
 
-  } @empty {
 
-    <app-empty-state />
+    @for (
+      user of filteredUsers();
+      track user.id
+    ) {
 
-  }
+      <app-user-card
 
-</div>
+        [user]="user"
+
+        [projects]="projects()"
+
+      />
+
+    } @empty {
+
+      <app-empty-state
+        message="Aucun utilisateur trouvé"
+      />
+
+    }
+
+  </div>
+
+}

@@ -1,111 +1,92 @@
-<!-- Recherche -->
+@if (loading()) {
 
-<div class="mb-6">
+  <div
+    class="p-4 text-center text-blue-600"
+  >
+    Chargement des projets...
+  </div>
 
-  <input
-
-    type="text"
-
-    [ngModel]="
-      searchTerm()
-    "
-
-    (ngModelChange)="
-      searchTerm.set(
-        $event
-      )
-    "
-
-    placeholder="
-      Rechercher un projet...
-    "
-
-    class="
-      border
-      rounded-lg
-      px-4 py-2
-      w-full
-    "
-  />
-
-</div>
+}
 
 
-<!-- Projets -->
+@if (error(); as errorMessage) {
 
-<div class="grid gap-6">
+  <div
+    class="p-4 mb-4 rounded-lg bg-red-100 text-red-700"
+  >
+    {{ errorMessage }}
+  </div>
 
-  @for (
-
-    project of
-      filteredProjects();
-
-    track project.id
-
-  ) {
+}
 
 
-    <app-project-card
+@if (!loading() && !error()) {
 
-      [project]="project"
+  <div class="mb-6">
 
+    <input
+      type="text"
 
-      [users]="
-        users()
+      [ngModel]="searchTerm()"
+
+      (ngModelChange)="
+        searchTerm.set($event)
       "
 
+      placeholder="Rechercher un projet..."
 
-      [completedTasks]="
-        completedTasksByProject()
-        [project.id]
-        ?? 0
-      "
-
-
-      (projectSelected)="
-        onProjectSelected(
-          $event
-        )
-      "
-
-
-      (taskStatusChange)="
-        onTaskStatusChange(
-          $event
-        )
-      "
-
-
-      (taskDelete)="
-        onTaskDelete(
-          $event
-        )
-      "
-
+      class="border rounded-lg px-4 py-2 w-full"
     />
 
-
-  } @empty {
-
-
-    <div
-      class="
-        rounded-lg
-        border
-        border-dashed
-        p-6
-        text-center
-        text-gray-500
-      "
-
-      role="status"
-    >
-
-      Aucun projet trouvé
-
-    </div>
+  </div>
 
 
-  }
+  <div class="grid gap-6">
 
-</div>
+    @for (
+      project of filteredProjects();
+      track project.id
+    ) {
+
+      <app-project-card
+
+        [project]="project"
+
+        [users]="users()"
+
+        [completedTasks]="
+          completedTasksByProject()[project.id]
+          ?? 0
+        "
+
+        (projectSelected)="
+          onProjectSelected($event)
+        "
+
+        (taskStatusChange)="
+          onTaskStatusChange($event)
+        "
+
+        (taskDelete)="
+          onTaskDelete($event)
+        "
+
+        (projectDelete)="
+          deleteProject($event)
+        "
+
+      />
+
+    } @empty {
+
+      <div
+        class="rounded-lg border border-dashed p-6 text-center text-gray-500"
+      >
+        Aucun projet trouvé
+      </div>
+
+    }
+
+  </div>
+
+}

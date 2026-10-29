@@ -9,49 +9,35 @@ import {
   FormsModule
 } from '@angular/forms';
 
-
 import {
   Project
 } from '../../models/project.model';
-
 
 import {
   User
 } from '../../../users/models/user.model';
 
-
 import {
   ProjectService
 } from '../../../../core/services/project.service';
-
 
 import {
   UserService
 } from '../../../../core/services/user.service';
 
-
 import {
   TaskStatusChange
 } from '../../models/task-status-change.model';
-
 
 import {
   TaskDelete
 } from '../../models/task-delete.model';
 
-
 import {
   ProjectCard
 } from '../project-card/project-card';
 
-
-import {
-  PROJECTS
-} from '../../data/projects.data';
-
-
 @Component({
-
   selector: 'app-project-list',
 
   imports: [
@@ -59,43 +45,31 @@ import {
     FormsModule
   ],
 
-  templateUrl:
-    './project-list.html',
-
-  styleUrl:
-    './project-list.css'
-
+  templateUrl: './project-list.html',
+  styleUrl: './project-list.css'
 })
 export class ProjectList {
-
 
   private projectService =
     inject(ProjectService);
 
-
   private userService =
     inject(UserService);
-
-
-  /*
-   * SIGNALS
-   */
 
   projects =
     signal<Project[]>([]);
 
-
   users =
     signal<User[]>([]);
-
 
   searchTerm =
     signal('');
 
+  loading =
+    this.projectService.loading;
 
-  /*
-   * Recherche
-   */
+  error =
+    this.projectService.error;
 
   filteredProjects =
     computed(() => {
@@ -105,29 +79,18 @@ export class ProjectList {
           .trim()
           .toLowerCase();
 
-
       if (!term) {
-
         return this.projects();
-
       }
-
 
       return this.projects()
         .filter(project =>
-
           project.name
             .toLowerCase()
             .includes(term)
-
         );
 
     });
-
-
-  /*
-   * Nombre de tâches terminées
-   */
 
   completedTasksByProject =
     computed(() => {
@@ -136,80 +99,63 @@ export class ProjectList {
         Record<number, number>
         = {};
 
-
       for (
         const project
         of this.projects()
       ) {
 
-        result[
-          project.id
-        ] =
-
+        result[project.id] =
           project.tasks
             .filter(
               task =>
-                task.status
-                === 'Terminé'
+                task.status === 'Terminé'
             )
             .length;
 
       }
 
-
       return result;
 
     });
 
-
-  /*
-   * RxJS
-   */
-
   constructor() {
+
+    console.log(
+      'ProjectList - ProjectService ID :',
+      this.projectService.id
+    );
 
     this.projectService
       .getProjects()
-      .subscribe(projects => {
+      .subscribe({
 
-        this.projects.set(
-          projects
-        );
+        next: projects => {
+          this.projects.set(projects);
+        }
 
       });
 
-
     this.userService
       .getUsers()
-      .subscribe(users => {
+      .subscribe({
 
-        this.users.set(
-          users
-        );
+        next: users => {
+          this.users.set(users);
+        }
 
       });
 
   }
 
-
-  /*
-   * Modification statut
-   */
-
   onTaskStatusChange(
     event: TaskStatusChange
   ): void {
 
-
     if (
-      event.projectId
-      === undefined
+      event.projectId === undefined
     ) {
-
       return;
-
     }
-
 
     this.projects.update(
       projects =>
@@ -217,52 +163,29 @@ export class ProjectList {
         projects.map(
           project => {
 
-
-            // Projet non concerné
-
             if (
-              project.id
-              !== event.projectId
+              project.id !== event.projectId
             ) {
-
               return project;
-
             }
-
-
-            // Nouveau projet
 
             return {
 
               ...project,
 
-
               tasks:
                 project.tasks.map(
                   task => {
 
-
-                    // Tâche non concernée
-
                     if (
-                      task.id
-                      !== event.taskId
+                      task.id !== event.taskId
                     ) {
-
                       return task;
-
                     }
 
-
-                    // Nouvelle tâche
-
                     return {
-
                       ...task,
-
-                      status:
-                        event.status
-
+                      status: event.status
                     };
 
                   }
@@ -277,26 +200,15 @@ export class ProjectList {
 
   }
 
-
-  /*
-   * BONUS :
-   * suppression tâche
-   */
-
   onTaskDelete(
     event: TaskDelete
   ): void {
 
-
     if (
-      event.projectId
-      === undefined
+      event.projectId === undefined
     ) {
-
       return;
-
     }
-
 
     this.projects.update(
       projects =>
@@ -304,30 +216,21 @@ export class ProjectList {
         projects.map(
           project => {
 
-
             if (
-              project.id
-              !== event.projectId
+              project.id !== event.projectId
             ) {
-
               return project;
-
             }
-
 
             return {
 
               ...project,
 
-
               tasks:
-
-                project.tasks
-                  .filter(
-                    task =>
-                      task.id
-                      !== event.taskId
-                  )
+                project.tasks.filter(
+                  task =>
+                    task.id !== event.taskId
+                )
 
             };
 
@@ -338,54 +241,29 @@ export class ProjectList {
 
   }
 
+  deleteProject(
+    projectId: number
+  ): void {
 
-  /*
-   * Fonctions déjà présentes
-   */
+    this.projectService
+      .deleteProject(projectId)
+      .subscribe({
 
-  resetProjects(): void {
+        next: () => {
 
-    this.projects.set(
+          this.projects.update(
+            projects =>
+              projects.filter(
+                project =>
+                  project.id !== projectId
+              )
+          );
 
-      PROJECTS.map(
-        project => ({
+        }
 
-          ...project,
-
-          tasks:
-            project.tasks.map(
-              task => ({
-                ...task
-              })
-            )
-
-        })
-      )
-
-    );
+      });
 
   }
-
-
-  clearProjects(): void {
-
-    this.projects.set([]);
-
-  }
-
-
-  removeLastProject(): void {
-
-    this.projects.update(
-      projects =>
-        projects.slice(
-          0,
-          -1
-        )
-    );
-
-  }
-
 
   onProjectSelected(
     project: Project
@@ -397,5 +275,4 @@ export class ProjectList {
     );
 
   }
-
 }
