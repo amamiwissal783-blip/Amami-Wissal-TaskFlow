@@ -35,7 +35,7 @@ import { TaskCountPipe } from '../../../../shared/pipes/task-count.pipe';
 
 import { HoverScaleDirective } from '../../../../shared/directives/hover-scale.directive';
 
-
+import { ThemeService } from '../../../../core/services/theme';
 @Component({
   selector: 'app-project-card',
 
@@ -66,6 +66,8 @@ import { HoverScaleDirective } from '../../../../shared/directives/hover-scale.d
     './project-card.css'
 })
 export class ProjectCard {
+
+  themeService = inject(ThemeService);
 
   favoritesService =
     inject(FavoritesService);

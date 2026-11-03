@@ -38,6 +38,7 @@ import {
 import {
   ProjectCard
 } from '../project-card/project-card';
+import { ThemeService } from '../../../../core/services/theme';
 
 @Component({
   selector: 'app-project-list',
@@ -60,6 +61,9 @@ export class ProjectList {
 
   private notificationService =
     inject(NotificationService);
+
+  private themeService =
+    inject(ThemeService);
 
   projects =
     signal<Project[]>([]);

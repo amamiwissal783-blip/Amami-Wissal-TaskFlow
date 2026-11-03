@@ -1,4 +1,4 @@
-import { Component, computed, input } from '@angular/core';
+import { Component, computed, input, inject} from '@angular/core';
 
 import { User } from '../../models/user.model';
 import { Project } from '../../../projects/models/project.model';
@@ -10,6 +10,7 @@ import { InitialsPipe } from '../../../../shared/pipes/initials.pipe';
 import { UserProjectGroup } from '../user-project-group/user-project-group';
 import { EmptyState } from '../../../../shared/components/empty-state/empty-state';
 
+import { ThemeService } from '../../../../core/services/theme';
 import { HoverScaleDirective } from '../../../../shared/directives/hover-scale.directive';
 @Component({
   selector: 'app-user-card',
@@ -29,6 +30,8 @@ import { HoverScaleDirective } from '../../../../shared/directives/hover-scale.d
   styleUrl: './user-card.css'
 })
 export class UserCard {
+
+  themeService = inject(ThemeService);
 
   user = input.required<User>();
   projects = input.required<Project[]>();
