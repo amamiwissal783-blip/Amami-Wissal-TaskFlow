@@ -2,8 +2,15 @@ import {
   Component,
   computed,
   input,
-  output
+  output,
+  inject
 } from '@angular/core';
+
+import { FavoritesService } from '../../../../core/services/favorites.service';
+
+import {
+  RecentProjectsService
+} from '../../../../core/services/recent-projects';
 
 import {
   CurrencyPipe,
@@ -59,6 +66,13 @@ import { HoverScaleDirective } from '../../../../shared/directives/hover-scale.d
     './project-card.css'
 })
 export class ProjectCard {
+
+  favoritesService =
+    inject(FavoritesService);
+
+
+  recentProjectsService =
+    inject(RecentProjectsService);
 
 
   project =
@@ -133,7 +147,6 @@ export class ProjectCard {
     });
 
 
-  // Compteurs priorité
 
   tasksByPriority =
     computed(() => {
@@ -193,6 +206,10 @@ export class ProjectCard {
 
 
   selectProject(): void {
+
+    this.recentProjectsService.addProject(
+      this.project()
+    );
 
     this.projectSelected.emit(
       this.project()

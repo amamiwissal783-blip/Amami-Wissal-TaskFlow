@@ -25,6 +25,8 @@ import {
   UserService
 } from '../../../../core/services/user.service';
 
+import { NotificationService } from '../../../../core/services/notification';
+
 import {
   TaskStatusChange
 } from '../../models/task-status-change.model';
@@ -55,6 +57,9 @@ export class ProjectList {
 
   private userService =
     inject(UserService);
+
+  private notificationService =
+    inject(NotificationService);
 
   projects =
     signal<Project[]>([]);
@@ -257,6 +262,10 @@ export class ProjectList {
                 project =>
                   project.id !== projectId
               )
+          );
+
+          this.notificationService.show(
+            'Projet supprimé avec succès.'
           );
 
         }

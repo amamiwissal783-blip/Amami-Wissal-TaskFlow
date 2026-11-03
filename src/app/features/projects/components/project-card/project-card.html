@@ -9,16 +9,58 @@
 >
 
 
-  <!-- Nom -->
 
-  <h2 class="text-2xl font-bold mb-2">
+<div
+  class="flex items-center justify-between"
+>
 
+  <h2
+    class="text-2xl font-bold mb-2"
+  >
     {{ project().name | uppercase }}
-
   </h2>
 
 
-  <!-- Description -->
+  <button
+    type="button"
+
+    class="
+      text-3xl
+      cursor-pointer
+    "
+
+    (click)="
+      favoritesService.toggle(
+        project().id
+      )
+    "
+  >
+
+    @if (
+      favoritesService.isFavorite(
+        project().id
+      )
+    ) {
+
+      <span class="text-yellow-500">
+        ★
+      </span>
+
+    } @else {
+
+      <span class="text-gray-400">
+        ☆
+      </span>
+
+    }
+
+  </button>
+
+</div>
+
+
+
+
 
   <p class="text-gray-600 mb-4">
 
@@ -27,7 +69,6 @@
   </p>
 
 
-  <!-- Date -->
 
   <p>
 
@@ -43,7 +84,6 @@
   </p>
 
 
-  <!-- Budget -->
 
   <p>
 
@@ -62,7 +102,6 @@
   </p>
 
 
-  <!-- Statut projet -->
 
   <p class="mt-2">
 
@@ -74,8 +113,6 @@
 
   </p>
 
-
-  <!-- Nombre de tâches -->
 
   <p class="mt-2">
 
@@ -91,7 +128,6 @@
   </p>
 
 
-  <!-- Nombre terminées -->
 
   <p class="mt-2">
 
@@ -108,7 +144,6 @@
   </p>
 
 
-  <!-- Progression -->
 
   @if (
     project().tasks.length > 0
@@ -127,8 +162,6 @@
 
       </p>
 
-
-      <!-- Barre -->
 
       <div
         class="

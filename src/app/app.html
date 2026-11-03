@@ -1,18 +1,47 @@
-<div class="p-6">
+<div
+  class="min-h-screen p-6"
+  [class.bg-gray-100]="
+    themeService.theme() === 'light'
+  "
+  [class.bg-slate-950]="
+    themeService.theme() === 'dark'
+  "
+  [class.text-gray-900]="
+    themeService.theme() === 'light'
+  "
+  [class.text-white]="
+    themeService.theme() === 'dark'
+  "
+>
+
+  <app-header />
+  <app-notification />
 
   <app-view-toggle
     [activeView]="currentView()"
     (viewChange)="changeView($event)"
   />
 
-  @if (currentView() === 'tasks') {
+  <div class="flex gap-6 mt-6">
 
-    <app-project-list />
+    <main class="flex-1">
 
-  } @else {
+      @if (
+        currentView() === 'tasks'
+      ) {
 
-    <app-user-list />
+        <app-project-list />
 
-  }
+      } @else {
+
+        <app-user-list />
+
+      }
+
+    </main>
+
+    <app-recent-projects-sidebar />
+
+  </div>
 
 </div>
