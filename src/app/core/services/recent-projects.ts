@@ -1,16 +1,21 @@
 import {
   Injectable,
-  signal
+  signal,
+  inject
 } from '@angular/core';
 
 import {
   Project
 } from '../../features/projects/models/project.model';
 
+import { ThemeService } from './theme';
+
 @Injectable({
   providedIn: 'root'
 })
 export class RecentProjectsService {
+
+  themeService = inject(ThemeService);
 
   recentProjects =
     signal<Project[]>([]);

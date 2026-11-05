@@ -1,41 +1,6 @@
 {
   "projects": [
     {
-      "id": "3",
-      "name": "Migration base de données",
-      "description": "Passage vers un nouveau serveur.",
-      "status": "En cours",
-      "startDate": "2026-08-20",
-      "budget": 12000,
-      "tasks": [
-        {
-          "id": 10,
-          "title": "Audit du schéma",
-          "priority": "Haute",
-          "status": "Terminé",
-          "assigneeId": 2,
-          "dueDate": "2026-09-05"
-        },
-        {
-          "id": 11,
-          "title": "Script de migration",
-          "priority": "Haute",
-          "status": "Terminé",
-          "assigneeId": 2,
-          "dueDate": "2026-09-25"
-        },
-        {
-          "id": 12,
-          "title": "Validation des données",
-          "priority": "Moyenne",
-          "status": "En cours",
-          "assigneeId": 3,
-          "dueDate": "2026-10-20",
-          "description": "Vérifier la cohérence des données migrées en comparant les volumes et les contenus avec l’ancien serveur."
-        }
-      ]
-    },
-    {
       "id": "4",
       "name": "Documentation technique",
       "description": "Guide développeur.",

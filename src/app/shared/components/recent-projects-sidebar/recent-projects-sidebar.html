@@ -1,11 +1,34 @@
 <aside
   class="
     w-72
-    bg-white
     border
     rounded-xl
     p-4
     shadow-sm
+  "
+
+  [class.bg-white]="
+    themeService.theme() === 'light'
+  "
+
+  [class.bg-slate-800]="
+    themeService.theme() === 'dark'
+  "
+
+  [class.text-gray-900]="
+    themeService.theme() === 'light'
+  "
+
+  [class.text-white]="
+    themeService.theme() === 'dark'
+  "
+
+  [class.border-gray-200]="
+    themeService.theme() === 'light'
+  "
+
+  [class.border-slate-700]="
+    themeService.theme() === 'dark'
   "
 >
 
@@ -27,25 +50,33 @@
 
     <div
       class="
-        border-b
         py-3
+        border-b
         last:border-b-0
+      "
+
+      [class.border-gray-200]="
+        themeService.theme() === 'light'
+      "
+
+      [class.border-slate-600]="
+        themeService.theme() === 'dark'
       "
     >
 
-      <p
-        class="
-          font-semibold
-          text-gray-800
-        "
-      >
+      <p class="font-semibold">
         {{ project.name }}
       </p>
 
       <p
-        class="
-          text-sm
-          text-gray-500
+        class="text-sm"
+
+        [class.text-gray-500]="
+          themeService.theme() === 'light'
+        "
+
+        [class.text-gray-300]="
+          themeService.theme() === 'dark'
         "
       >
         {{ project.status }}
@@ -56,9 +87,14 @@
   } @empty {
 
     <p
-      class="
-        text-sm
-        text-gray-500
+      class="text-sm"
+
+      [class.text-gray-500]="
+        themeService.theme() === 'light'
+      "
+
+      [class.text-gray-300]="
+        themeService.theme() === 'dark'
       "
     >
       Aucun projet consulté

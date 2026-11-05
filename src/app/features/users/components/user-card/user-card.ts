@@ -1,29 +1,57 @@
-import { Component, computed, input, inject} from '@angular/core';
+import {
+  Component,
+  computed,
+  inject,
+  input
+} from '@angular/core';
 
-import { User } from '../../models/user.model';
-import { Project } from '../../../projects/models/project.model';
+import {
+  LowerCasePipe,
+  NgClass,
+  NgStyle,
+  TitleCasePipe
+} from '@angular/common';
 
-import { LowerCasePipe, TitleCasePipe, NgClass, NgStyle } from '@angular/common';
+import {
+  User
+} from '../../models/user.model';
 
-import { InitialsPipe } from '../../../../shared/pipes/initials.pipe';
+import {
+  Project
+} from '../../../projects/models/project.model';
 
-import { UserProjectGroup } from '../user-project-group/user-project-group';
-import { EmptyState } from '../../../../shared/components/empty-state/empty-state';
+import {
+  InitialsPipe
+} from '../../../../shared/pipes/initials.pipe';
 
-import { ThemeService } from '../../../../core/services/theme';
-import { HoverScaleDirective } from '../../../../shared/directives/hover-scale.directive';
+import {
+  EmptyState
+} from '../../../../shared/components/empty-state/empty-state';
+
+import {
+  UserProjectGroup
+} from '../user-project-group/user-project-group';
+
+import {
+  HoverScaleDirective
+} from '../../../../shared/directives/hover-scale.directive';
+
+import {
+  ThemeService
+} from '../../../../core/services/theme';
+
 @Component({
   selector: 'app-user-card',
 
   imports: [
-    UserProjectGroup,
-    HoverScaleDirective,
-    EmptyState,
-    TitleCasePipe,
     LowerCasePipe,
-    InitialsPipe,
+    TitleCasePipe,
     NgClass,
-    NgStyle
+    NgStyle,
+    InitialsPipe,
+    EmptyState,
+    UserProjectGroup,
+    HoverScaleDirective
   ],
 
   templateUrl: './user-card.html',
@@ -31,78 +59,92 @@ import { HoverScaleDirective } from '../../../../shared/directives/hover-scale.d
 })
 export class UserCard {
 
-  themeService = inject(ThemeService);
+  user =
+    input.required<User>();
 
-  user = input.required<User>();
-  projects = input.required<Project[]>();
+  projects =
+    input.required<Project[]>();
 
-  roleColors: Record<string, string> = {
-    'Développeur': '#3b82f6',
-    'Designer': '#a855f7',
-    'Chef de projet': '#f59e0b',
-    'Testeur': '#22c55e'
-  };
+  themeService =
+    inject(ThemeService);
 
-  get avatarColor(): string {
-    return this.roleColors[this.user().role] ?? '#6b7280';
-  }
+  avatarColor =
+    '#3b82f6';
 
-  assignedTasks = computed(() => {
+  projectsWithTasks =
+    computed(() => {
 
-    return this.projects().flatMap(project =>
-      project.tasks.filter(
-        task => task.assigneeId === this.user().id
-      )
+      return this.projects()
+        .map(project => {
+
+          const tasks =
+            project.tasks.filter(
+              task =>
+                Number(task.assigneeId) ===
+                Number(this.user().id)
+            );
+
+          return {
+            project,
+            tasks
+          };
+
+        })
+        .filter(
+          group =>
+            group.tasks.length > 0
+        );
+
+    });
+
+  allUserTasks =
+    computed(() => {
+
+      return this.projectsWithTasks()
+        .flatMap(
+          group =>
+            group.tasks
+        );
+
+    });
+
+  pendingCount =
+    computed(() =>
+
+      this.allUserTasks()
+        .filter(
+          task =>
+            task.status ===
+            'En attente'
+        )
+        .length
+
     );
 
-  });
+  inProgressCount =
+    computed(() =>
 
-
-  pendingCount = computed(() => {
-
-    return this.assignedTasks().filter(
-      task => task.status === 'En attente'
-    ).length;
-
-  });
-
-
-  inProgressCount = computed(() => {
-
-    return this.assignedTasks().filter(
-      task => task.status === 'En cours'
-    ).length;
-
-  });
-
-
-  completedCount = computed(() => {
-
-    return this.assignedTasks().filter(
-      task => task.status === 'Terminé'
-    ).length;
-
-  });
-
-
-  projectsWithTasks = computed(() => {
-
-    return this.projects()
-
-      .map(project => ({
-
-        project: project,
-
-        tasks: project.tasks.filter(
-          task => task.assigneeId === this.user().id
+      this.allUserTasks()
+        .filter(
+          task =>
+            task.status ===
+            'En cours'
         )
+        .length
 
-      }))
+    );
 
-      .filter(group =>
-        group.tasks.length > 0
-      );
+  completedCount =
+    computed(() =>
 
-  });
+      this.allUserTasks()
+        .filter(
+          task =>
+            task.status ===
+            'Terminé'
+        )
+        .length
+
+    );
 
 }

@@ -7,6 +7,10 @@ import {
   RecentProjectsService
 } from '../../../core/services/recent-projects';
 
+import {
+  ThemeService
+} from '../../../core/services/theme';
+
 @Component({
   selector: 'app-recent-projects-sidebar',
   imports: [],
@@ -17,5 +21,8 @@ export class RecentProjectsSidebar {
 
   recentProjectsService =
     inject(RecentProjectsService);
+
+  themeService =
+    inject(ThemeService);
 
 }

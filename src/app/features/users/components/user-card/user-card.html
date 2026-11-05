@@ -1,10 +1,12 @@
-<aside
+<div
+  appHoverScale
+
   class="
-    w-72
     border
     rounded-xl
-    p-4
+    p-5
     shadow-sm
+    mb-5
   "
 
   [class.bg-white]="
@@ -27,25 +29,41 @@
     themeService.theme() === 'light'
   "
 
-  [class.border-slate-700]="
+  [class.border-slate-600]="
     themeService.theme() === 'dark'
   "
 >
 
-<div
-  appHoverScale
-  class="border rounded-xl p-5 shadow-sm bg-white mb-5">
+  <div
+    class="
+      flex
+      justify-between
+      items-start
+      mb-5
+    "
+  >
 
-  <!-- Informations utilisateur -->
-  <div class="flex justify-between items-start mb-5">
+    <div
+      class="
+        flex
+        items-center
+        gap-4
+      "
+    >
 
-    <div class="flex items-center gap-4">
-
-      <!-- Avatar avec InitialsPipe -->
       <div
-        class="w-12 h-12 rounded-full text-white
-              flex items-center justify-center
-              font-bold text-lg"
+        class="
+          w-12
+          h-12
+          rounded-full
+          text-white
+          flex
+          items-center
+          justify-center
+          font-bold
+          text-lg
+        "
+
         [ngStyle]="{
           'background-color': avatarColor
         }"
@@ -54,16 +72,30 @@
       </div>
 
 
-      <!-- Nom, email, rôle -->
       <div>
 
-        <h2 class="text-xl font-bold">
+        <h2
+          class="
+            text-xl
+            font-bold
+          "
+        >
           {{ user().name | titlecase }}
         </h2>
 
-        <p class="text-gray-500">
+
+        <p
+          [class.text-gray-500]="
+            themeService.theme() === 'light'
+          "
+
+          [class.text-gray-300]="
+            themeService.theme() === 'dark'
+          "
+        >
           {{ user().email | lowercase }}
         </p>
+
 
         <p class="text-sm mt-1">
           {{ user().role }}
@@ -75,25 +107,50 @@
 
 
     <span
-      class="px-3 py-1 rounded-full"
+      class="
+        px-3
+        py-1
+        rounded-full
+      "
+
       [ngClass]="{
-        'bg-green-100 text-green-700': user().active,
-        'bg-gray-200 text-gray-600': !user().active
-      }">
-        {{user().active ? 'Actif' : 'Inactif'}}
-      </span>
+        'bg-green-100 text-green-700':
+          user().active,
 
-
+        'bg-gray-200 text-gray-600':
+          !user().active
+      }"
+    >
+      {{ user().active ? 'Actif' : 'Inactif' }}
+    </span>
 
   </div>
 
 
-  <!-- Compteurs des tâches -->
+  <div
+    class="
+      grid
+      grid-cols-3
+      gap-3
+      mb-6
+    "
+  >
 
-  <div class="grid grid-cols-3 gap-3 mb-6">
+    <div
+      class="
+        p-3
+        rounded-lg
+        text-center
+      "
 
-    <!-- À faire -->
-    <div class="bg-gray-100 p-3 rounded-lg text-center">
+      [class.bg-gray-100]="
+        themeService.theme() === 'light'
+      "
+
+      [class.bg-slate-700]="
+        themeService.theme() === 'dark'
+      "
+    >
 
       <p class="text-xl font-bold">
         {{ pendingCount() }}
@@ -106,8 +163,21 @@
     </div>
 
 
-    <!-- En cours -->
-    <div class="bg-gray-100 p-3 rounded-lg text-center">
+    <div
+      class="
+        p-3
+        rounded-lg
+        text-center
+      "
+
+      [class.bg-gray-100]="
+        themeService.theme() === 'light'
+      "
+
+      [class.bg-slate-700]="
+        themeService.theme() === 'dark'
+      "
+    >
 
       <p class="text-xl font-bold">
         {{ inProgressCount() }}
@@ -120,8 +190,21 @@
     </div>
 
 
-    <!-- Terminées -->
-    <div class="bg-gray-100 p-3 rounded-lg text-center">
+    <div
+      class="
+        p-3
+        rounded-lg
+        text-center
+      "
+
+      [class.bg-gray-100]="
+        themeService.theme() === 'light'
+      "
+
+      [class.bg-slate-700]="
+        themeService.theme() === 'dark'
+      "
+    >
 
       <p class="text-xl font-bold">
         {{ completedCount() }}
@@ -136,16 +219,17 @@
   </div>
 
 
-  <!-- Tâches regroupées par projet -->
-
   @for (
     group of projectsWithTasks();
     track group.project.id
   ) {
 
     <app-user-project-group
+
       [project]="group.project"
+
       [tasks]="group.tasks"
+
     />
 
   } @empty {
